@@ -1,0 +1,34 @@
+!pip install pystan
+
+!pip install prophet
+
+import pandas as pd
+from prophet import Prophet
+
+df = pd.read_csv('digital media spend.csv')
+
+df.head()
+
+df.dtypes
+
+df['date time']=pd.to_datetime(df['date time'],format='%m/%d/%y')
+
+df.dtypes
+
+df.drop(['Product Category', 'Cal Year', 'Cal Year-Month', 'Cal Month'],axis = 1, inplace=True)
+
+df.columns=['x','y','ds']
+
+df.head()
+
+m = Prophet(interval_width=0.95, daily_seasonality=True)
+model = m.fit(df)
+
+future = m.make_future_dataframe(periods=100,freq='D')
+forecast = m.predict(future)
+forecast.head()
+
+plot1 = m.plot(forecast)
+
+plt2 = m.plot_components(forecast)
+
